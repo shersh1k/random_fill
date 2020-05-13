@@ -1,13 +1,28 @@
-import { GameState, GameActionTypes, ROLL_THE_DICE, ROTATE_FIGURE, SET_CONFIG } from './types';
+import {
+  GameState,
+  GameActionTypes,
+  ROLL_THE_DICE,
+  ROTATE_FIGURE,
+  SET_CONFIG,
+  SET_FIGURE_POSITION,
+  SET_FIELD_MATRIX,
+  SET_FINAL_FIGURE_POSITION,
+  SET_TEMP_FIELD_MATRIX,
+  SET_PLAYER,
+} from './types';
 import { makeFieldMatrix } from '../../Utils';
 
 const initialState: GameState = {
   config: null,
+  cellSide: 20,
   fieldMatrix: null,
+  tempFieldMatrix: null,
   dice: null,
   currentFigure: null,
   players: null,
   currentPlayer: null,
+  currentFigureX: 0,
+  currentFigureY: 0,
 };
 
 export function gameReducer(state = initialState, action: GameActionTypes) {
@@ -17,6 +32,16 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
     case ROTATE_FIGURE:
       return { ...state, ...action };
     case SET_CONFIG:
+      return { ...state, ...action };
+    case SET_FIGURE_POSITION:
+      return { ...state, ...action };
+    case SET_FIELD_MATRIX:
+      return { ...state, ...action };
+    case SET_TEMP_FIELD_MATRIX:
+      return { ...state, ...action };
+    case SET_FINAL_FIGURE_POSITION:
+      return { ...state, ...action };
+    case SET_PLAYER:
       return { ...state, ...action };
 
     default:

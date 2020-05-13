@@ -1,4 +1,10 @@
-.configurator{
+.configurator {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+.players {
+}
+.players__item {
+  display: flex;
 }
