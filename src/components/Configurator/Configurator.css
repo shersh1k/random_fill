@@ -1,0 +1,4 @@
+.configurator{
+  display: flex;
+  flex-direction: column;
+}

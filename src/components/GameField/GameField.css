@@ -1,0 +1,16 @@
+.game-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-field__row {
+  display: flex;
+}
+
+.game-field__cell {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid lightgrey;
+  cursor: default;
+}
