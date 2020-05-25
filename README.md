@@ -49,6 +49,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
     <li>TODO: pass</li>
     <li>TODO: autoFill</li>
     <li>TODO: autoWin(when nullCells < difference between players)</li>
+    <li>TODO: throttling mousemove</li>
   </ul>
 </li>
 <li>TODO: USE react-jss</li>
