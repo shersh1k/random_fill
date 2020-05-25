@@ -43,5 +43,13 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
-TODO: USE react-jss
+<ul>
+<li>
+  <ul>
+    <li>TODO: pass</li>
+    <li>TODO: autoFill</li>
+    <li>TODO: autoWin(when nullCells < difference between players)</li>
+  </ul>
+</li>
+<li>TODO: USE react-jss</li>
+</ul>
