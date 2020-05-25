@@ -14,6 +14,7 @@ import {
   SET_FINAL_FIGURE_POSITION,
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
+  GameArray,
 } from './types';
 import { getRandomInt, makeFieldMatrix } from '../../Utils';
 
@@ -68,7 +69,7 @@ export function setFigurePosition(x: number, y: number) {
   };
 }
 
-export function setFieldMatrix(newFieldMatrix: Array<Array<PlayerColor | null>>) {
+export function setFieldMatrix(newFieldMatrix: GameArray) {
   return function (dispatch: Dispatch<GameActionTypes>) {
     dispatch({
       type: SET_FIELD_MATRIX,
@@ -77,7 +78,7 @@ export function setFieldMatrix(newFieldMatrix: Array<Array<PlayerColor | null>>)
   };
 }
 
-export function setTempFieldMatrix(newFieldMatrix: Array<Array<PlayerColor | null>>) {
+export function setTempFieldMatrix(newFieldMatrix: GameArray) {
   return function (dispatch: Dispatch<GameActionTypes>) {
     dispatch({
       type: SET_TEMP_FIELD_MATRIX,
@@ -86,7 +87,7 @@ export function setTempFieldMatrix(newFieldMatrix: Array<Array<PlayerColor | nul
   };
 }
 
-export function setFinalFigurePosition(newFieldMatrix: Array<Array<PlayerColor | null>>) {
+export function setFinalFigurePosition(newFieldMatrix: GameArray) {
   return function (dispatch: Dispatch<GameActionTypes>) {
     dispatch({
       type: SET_FINAL_FIGURE_POSITION,

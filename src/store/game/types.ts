@@ -10,10 +10,10 @@ export const SET_PLAYER = 'SET_PLAYER';
 export interface GameState {
   config: iConfig | null;
   cellSide: number;
-  fieldMatrix: Array<Array<PlayerColor | null>> | null;
-  tempFieldMatrix: Array<Array<PlayerColor | null>> | null;
+  fieldMatrix: GameArray | null;
+  tempFieldMatrix: GameArray | null;
   dice: Dices | null;
-  currentFigure: Array<Array<PlayerColor | null>> | null;
+  currentFigure: GameArray | null;
   currentFigureX: number;
   currentFigureY: number;
   players: Array<iPlayer> | null;
@@ -30,7 +30,7 @@ export interface iPlayer {
   color: PlayerColor;
   count: number;
 }
-
+export type GameArray = Array<Array<PlayerColor | null>>;
 export type PlayerColor = 'Red' | 'Green' | 'Yellow' | 'Blue';
 export type Dices = [Dice, Dice];
 export type Dice = 1 | 2 | 3 | 4 | 5 | 6;
@@ -38,20 +38,20 @@ export type Dice = 1 | 2 | 3 | 4 | 5 | 6;
 interface RollTheDice {
   type: typeof ROLL_THE_DICE;
   dice: Dices;
-  currentFigure: Array<Array<PlayerColor | null>>;
+  currentFigure: GameArray;
 }
 
 interface RotateFigure {
   type: typeof ROTATE_FIGURE;
   dice: Dices;
-  currentFigure: Array<Array<PlayerColor | null>>;
+  currentFigure: GameArray;
 }
 
 interface SetConfig {
   type: typeof SET_CONFIG;
   config: iConfig;
-  fieldMatrix: Array<Array<PlayerColor | null>>;
-  tempFieldMatrix: Array<Array<PlayerColor | null>>;
+  fieldMatrix: GameArray;
+  tempFieldMatrix: GameArray;
   players: Array<iPlayer> | null;
   currentPlayer: iPlayer;
 }
@@ -64,17 +64,17 @@ interface SetFigurePosition {
 
 interface SetFinalFigurePosition {
   type: typeof SET_FINAL_FIGURE_POSITION;
-  tempFieldMatrix: Array<Array<PlayerColor | null>> | null;
+  tempFieldMatrix: GameArray | null;
 }
 
 interface SetFieldMatrix {
   type: typeof SET_FIELD_MATRIX;
-  fieldMatrix: Array<Array<PlayerColor | null>> | null;
+  fieldMatrix: GameArray | null;
 }
 
 interface SetTempFieldMatrix {
   type: typeof SET_TEMP_FIELD_MATRIX;
-  tempFieldMatrix: Array<Array<PlayerColor | null>> | null;
+  tempFieldMatrix: GameArray | null;
 }
 
 interface SetPlayer {

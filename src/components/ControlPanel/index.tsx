@@ -62,16 +62,18 @@ function ControlPanel() {
     }
   };
   const submitHandler = () => {
-    if (!players) return;
+    if (!players || !currentPlayer || !tempFieldMatrix) return;
     const isDifferent = tempFieldMatrix?.join() !== fieldMatrix?.join();
     if (tempFieldMatrix && isDifferent) {
       dispatch(setFieldMatrix(tempFieldMatrix));
     }
-    const playerIndex = players.findIndex((item) => item.name === currentPlayer?.name);
+    const playerIndex = players.findIndex((item) => item.name === currentPlayer.name);
     const nextPlayerIndex = playerIndex + 1;
     const nextPlayer = players[nextPlayerIndex] || players[0];
     setStepDone(false);
     setRollDiceDone(false);
+    currentPlayer.count = tempFieldMatrix.flat().filter((item) => item === currentPlayer.color).length;
+    dispatch(setPlayer(Object.assign({}, currentPlayer)));
     dispatch(setPlayer(nextPlayer));
   };
   return (
