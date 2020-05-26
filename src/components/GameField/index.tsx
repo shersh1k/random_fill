@@ -30,12 +30,12 @@ function GameField() {
       const mouseOverCellX = (currentFigureX - geometry.left) / cellSide;
       const mouseOverCellY = (currentFigureY - geometry.top) / cellSide;
       const rectangleCoordinates = setRectangleCells(mouseOverCellX, mouseOverCellY, dice);
-
       //Если фигура залазит за край поля, выходим
       if (isOverEdge(rectangleCoordinates, config)) return;
       //Если первый ход и не в углу, выходим
-      if (isFirstMove(currentPlayer?.count) && !isInCorner(rectangleCoordinates, config)) return;
-      if (!isInsertByRules(fieldMatrix, rectangleCoordinates, currentPlayer, isFirstMove(currentPlayer.count))) return;
+      const isFM = isFirstMove(currentPlayer?.count)
+      if (isFM && !isInCorner(rectangleCoordinates, config)) return;
+      if (!isInsertByRules(fieldMatrix, rectangleCoordinates, currentPlayer, isFM)) return;
 
       const newFieldMatrix = fillFieldMatrix(fieldMatrix, rectangleCoordinates, currentPlayer);
       dispatch(setTempFieldMatrix(newFieldMatrix));
@@ -91,7 +91,6 @@ const setRectangleCells = (mouseOverCellX: number, mouseOverCellY: number, dice:
 
 const isInsertByRules = (field: GameArray, figure: iRectangleCells, player: iPlayer, isFirstMove: boolean) => {
   if (isFirstMove) return true;
-  let isErrors = [];
   const siblingCells = field.reduce((acc, itemY, iY, arr) => {
     if (figure.yStart - 1 === iY || iY === figure.yEnd)
       acc.push(...itemY.filter((itemX, iX) => figure.xStart <= iX && iX < figure.xEnd));
@@ -107,6 +106,7 @@ const isInsertByRules = (field: GameArray, figure: iRectangleCells, player: iPla
   }, []);
   if (cellsUnderFigure.filter((item) => item).length > 0) return false;
   if (siblingCells.filter((item) => item === player.color).length > 0) return true;
+  return false;
 };
 
 const fillFieldMatrix = (fieldMatrix: GameArray, rectCoord: iRectangleCells, currentPlayer: iPlayer) =>
