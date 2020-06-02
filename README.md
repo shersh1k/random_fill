@@ -47,7 +47,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 <li>
   <ul>
     <li>TODO: pass</li>
-    <li>TODO: autoFill</li>
+    <li>TODO: autoFill(рекурсивно при встрече пустой клетки чекать область вокруг нее)</li> 
     <li>TODO: autoWin(when nullCells < difference between players)</li>
     <li>TODO: throttling mousemove</li>
   </ul>
