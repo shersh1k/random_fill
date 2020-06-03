@@ -118,7 +118,7 @@ const fillFieldMatrix = (fieldMatrix: GameArray, rectCoord: iRectangleCells, cur
         return item;
       });
     }
-    return item;
+    return item.slice();
   });
   return newFieldMatrix;
 };
@@ -140,96 +140,80 @@ const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   });
   if (boolArr.filter((item) => item.filter((item) => item === false).length).length) {
     let a = fillTrue(boolArr);
-    // debugger;
     console.log(a);
+    a.forEach((item, iY) =>
+      item.forEach((item, iX) => {
+        if (item === true) fieldMatrix[iY][iX] = color;
+      })
+    );
   }
 };
 
-const fillTrue = (gameField: Array<Array<boolean | null>>): any => {
+const fillTrue = (gameField: Array<Array<Cell>>): Cell[][] => {
   gameField.forEach((itemY, iY) =>
     itemY.forEach((itemX, iX) => {
       if (gameField[iY][iX] === false) return;
-      else if (checkSiblings(gameField, iY, iX) && gameField[iY][iX] !== true) {
-        // debugger;
-        checkSiblings(gameField, iY, iX);
-        gameField[iY][iX] = true;
-      }
+      else checkSiblings(gameField, { y: iY, x: iX });
     })
   );
   return gameField;
 };
 
-const checkSiblings = (gameField: Array<Array<boolean | null>>, y: number, x: number, vector?: Vector): boolean => {
-  // console.log(y, x, vector);
+const checkSiblings = (gameField: Array<Array<Cell>>, currPos: iPosition): boolean => {
+  const { x, y } = currPos;
   if (y < 0 || x < 0 || y >= gameField.length || x >= gameField[0].length) return true;
   if (gameField[y][x] === true) return true;
-  if (vector === 'up') {
-    const up = gameField[y - 1]?.[x];
-    const right = gameField[y]?.[x + 1];
-    if (up === false || right === false) return false;
-    else {
-      const arr = [up, right].filter((item, i) => {
-        if (i === 0 && item === null) return checkSiblings(gameField, y - 1, x, 'up');
-        if (i === 1 && item === null) return checkSiblings(gameField, y, x + 1, 'up');
-        if (item === undefined || item === true || item === null) return true;
-      });
-      return arr.length > 1;
-    }
-  } else if (vector === 'right') {
-    const right = gameField[y]?.[x + 1];
-    const bottom = gameField[y + 1]?.[x];
-    if (right === false || bottom === false) return false;
-    else {
-      const arr = [right, bottom].filter((item, i) => {
-        if (i === 0 && item === null) return checkSiblings(gameField, y, x + 1, 'right');
-        if (i === 1 && item === null) return checkSiblings(gameField, y + 1, x, 'right');
-        if (item === undefined || item === true || item === null) return true;
-      });
-      return arr.length > 1;
-    }
-  } else if (vector === 'bottom') {
-    const bottom = gameField[y + 1]?.[x];
-    const left = gameField[y]?.[x - 1];
-    if (bottom === false || left === false) return false;
-    else {
-      const arr = [bottom, left].filter((item, i) => {
-        if (i === 0 && item === null) return checkSiblings(gameField, y + 1, x, 'bottom');
-        if (i === 1 && item === null) return checkSiblings(gameField, y, x - 1, 'bottom');
-        if (item === undefined || item === true || item === null) return true;
-      });
-      return arr.length > 1;
-    }
-  } else if (vector === 'left') {
-    const up = gameField[y - 1]?.[x];
-    const left = gameField[y]?.[x - 1];
-    if (up === false || left === false) return false;
-    else {
-      const arr = [up, left].filter((item, i) => {
-        if (i === 0 && item === null) return checkSiblings(gameField, y - 1, x, 'left');
-        if (i === 1 && item === null) return checkSiblings(gameField, y, x - 1, 'left');
-        if (item === undefined || item === true || item === null) return true;
-      });
-      return arr.length > 1;
-    }
+  const up = {
+    content: gameField[y - 1]?.[x],
+    position: { x: x, y: y - 1 },
+  };
+  const right = {
+    content: gameField[y]?.[x + 1],
+    position: { x: x + 1, y: y },
+  };
+  const bottom = {
+    content: gameField[y + 1]?.[x],
+    position: { x: x, y: y + 1 },
+  };
+  const left = {
+    content: gameField[y]?.[x - 1],
+    position: { x: x - 1, y: y },
+  };
+  const siblingCellsArr = [up, right, bottom, left];
+  if (siblingCellsArr.filter((item) => item.content === false).length > 0) {
+    siblingCellsArr.forEach((item) => {
+      if (gameField?.[item.position.y]?.[item.position.x]) gameField[item.position.y][item.position.x] = false;
+    });
+    gameField[y][x] = false;
+    gameField.forEach((item, iY) =>
+      item.forEach((item, iX) => {
+        if (item === '?') gameField[iY][iX] = false;
+      })
+    );
+    return false;
   } else {
-    const up = gameField[y - 1]?.[x];
-    const right = gameField[y]?.[x + 1];
-    const bottom = gameField[y + 1]?.[x];
-    const left = gameField[y]?.[x - 1];
-    if (up === false || right === false || bottom === false || left === false) return false;
-    else {
-      const arr = [up, right, bottom, left].filter((item, i) => {
-        if (i === 0 && item === null) return checkSiblings(gameField, y - 1, x, 'up');
-        if (i === 1 && item === null) return checkSiblings(gameField, y, x + 1, 'right');
-        if (i === 2 && item === null) return checkSiblings(gameField, y + 1, x, 'bottom');
-        if (i === 3 && item === null) return checkSiblings(gameField, y, x - 1, 'left');
-        if (item === undefined || item === true || item === null) return true;
-      });
-      return arr.length > 3;
-    }
+    gameField[y][x] = '?';
+    const arr = siblingCellsArr.filter((item) => {
+      if (item.content === undefined || item.content === true || item.content === '?') return true;
+      if (item.content === null) {
+        return checkSiblings(gameField, item.position);
+      }
+    });
+    gameField.forEach((item, iY) =>
+      item.forEach((item, iX) => {
+        if (item === '?' && arr.length >= 4) gameField[iY][iX] = true;
+        else if (item !== true) gameField[iY][iX] = false;
+      })
+    );
+    return arr.length >= 4;
   }
 };
 
 const byRule = (cell: boolean | undefined) => cell === undefined || cell === null;
 
-type Vector = 'up' | 'right' | 'bottom' | 'left';
+interface iPosition {
+  x: number;
+  y: number;
+}
+
+type Cell = boolean | '?' | null;
