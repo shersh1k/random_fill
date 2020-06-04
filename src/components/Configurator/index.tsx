@@ -7,8 +7,8 @@ import { Button, Input, InputNumber } from 'antd';
 
 function Configurator() {
   const dispatch = useDispatch();
-  const [x, setX] = useState(10);
-  const [y, setY] = useState(10);
+  const [x, setX] = useState(20);
+  const [y, setY] = useState(20);
   const [players, setPlayers] = useState(['player1', 'player2']);
   const playersHandler = (value: string, index: number) => {
     const newPlayers = players.map((item, i) => {
@@ -18,13 +18,13 @@ function Configurator() {
     setPlayers(newPlayers);
   };
   const submit = () => {
-    if (x < 10 || y < 10 || x > 45 || y > 45) return;
+    if (x < 20 || y < 20 || x > 45 || y > 45) return;
     dispatch(setConfig({ players, x, y }));
   };
   return (
     <div className='configurator'>
-      <InputNumber min={10} max={45} value={x} onChange={(e) => setX(Number(e))} type='number' />
-      <InputNumber min={10} max={45} value={y} onChange={(e) => setY(Number(e))} type='number' />
+      <InputNumber min={20} max={45} value={x} onChange={(e) => setX(Number(e))} type='number' />
+      <InputNumber min={20} max={45} value={y} onChange={(e) => setY(Number(e))} type='number' />
       <div className='players'></div>
       {players.map((item, i) => (
         <div className='players__item' key={i}>

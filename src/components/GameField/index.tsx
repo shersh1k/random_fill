@@ -149,42 +149,42 @@ const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   }
 };
 
-const fillTrue = (gameField: Array<Array<Cell>>): Cell[][] => {
+const fillTrue = (gameField: Array<Array<TCell>>): TCell[][] => {
   gameField.forEach((itemY, iY) =>
     itemY.forEach((itemX, iX) => {
       if (gameField[iY][iX] === false) return;
-      else checkSiblings(gameField, { y: iY, x: iX });
+      else {
+        checkSiblings(gameField, { y: iY, x: iX });
+        gameField.forEach((item, iY) =>
+          item.forEach((item, iX) => {
+            if (item === '?') gameField[iY][iX] = true;
+          })
+        );
+      }
     })
   );
   return gameField;
 };
 
-const checkSiblings = (gameField: Array<Array<Cell>>, currPos: iPosition): boolean => {
-  const { x, y } = currPos;
+const checkSiblings = (gameField: Array<Array<TCell>>, { x, y }: iPosition): boolean => {
+  console.log(x, y);
+
   if (y < 0 || x < 0 || y >= gameField.length || x >= gameField[0].length) return true;
   if (gameField[y][x] === true) return true;
-  const up = {
-    content: gameField[y - 1]?.[x],
-    position: { x: x, y: y - 1 },
-  };
-  const right = {
-    content: gameField[y]?.[x + 1],
-    position: { x: x + 1, y: y },
-  };
-  const bottom = {
-    content: gameField[y + 1]?.[x],
-    position: { x: x, y: y + 1 },
-  };
-  const left = {
-    content: gameField[y]?.[x - 1],
-    position: { x: x - 1, y: y },
-  };
-  const siblingCellsArr = [up, right, bottom, left];
-  if (siblingCellsArr.filter((item) => item.content === false).length > 0) {
+
+  const top = new Cell(x, y - 1, 'top');
+  const right = new Cell(x + 1, y, 'right');
+  const bottom = new Cell(x, y + 1, 'bottom');
+  const left = new Cell(x - 1, y, 'left');
+
+  const siblingCellsArr = [top, right, bottom, left];
+  const currentContents = siblingCellsArr.map((item) => ({ ...item, content: item.currentContent(gameField) }));
+  if (siblingCellsArr.filter((item) => item.currentContent(gameField) === false).length > 0) {
     siblingCellsArr.forEach((item) => {
-      if (gameField?.[item.position.y]?.[item.position.x]) gameField[item.position.y][item.position.x] = false;
+      if (item.currentContent(gameField) !== undefined && item.currentContent(gameField) !== true)
+        gameField[item.y][item.x] = false;
     });
-    gameField[y][x] = false;
+    if (gameField[y][x] !== undefined && gameField[y][x] !== true) gameField[y][x] = false;
     gameField.forEach((item, iY) =>
       item.forEach((item, iX) => {
         if (item === '?') gameField[iY][iX] = false;
@@ -194,17 +194,16 @@ const checkSiblings = (gameField: Array<Array<Cell>>, currPos: iPosition): boole
   } else {
     gameField[y][x] = '?';
     const arr = siblingCellsArr.filter((item) => {
-      if (item.content === undefined || item.content === true || item.content === '?') return true;
-      if (item.content === null) {
-        return checkSiblings(gameField, item.position);
+      if (
+        item.currentContent(gameField) === undefined ||
+        item.currentContent(gameField) === true ||
+        item.currentContent(gameField) === '?'
+      )
+        return true;
+      if (item.currentContent(gameField) === null) {
+        return checkSiblings(gameField, { x: item.x, y: item.y });
       }
     });
-    gameField.forEach((item, iY) =>
-      item.forEach((item, iX) => {
-        if (item === '?' && arr.length >= 4) gameField[iY][iX] = true;
-        else if (item !== true) gameField[iY][iX] = false;
-      })
-    );
     return arr.length >= 4;
   }
 };
@@ -216,4 +215,18 @@ interface iPosition {
   y: number;
 }
 
-type Cell = boolean | '?' | null;
+type TCell = boolean | '?' | null;
+
+class Cell {
+  x: number;
+  y: number;
+  type: 'top' | 'right' | 'bottom' | 'left';
+  constructor(x: number, y: number, type: 'top' | 'right' | 'bottom' | 'left') {
+    this.x = x;
+    this.y = y;
+    this.type = type;
+  }
+  currentContent = (gameField: TCell[][]) => {
+    return gameField[this.y]?.[this.x];
+  };
+}
