@@ -1,54 +1,78 @@
-import React, { useState } from 'react';
-import './Configurator.css';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setConfig } from '../../store/game/actions';
-import { Button, Input, InputNumber } from 'antd';
+import { Form, Button, Input, InputNumber, Space, Card } from 'antd';
+import { Store } from 'antd/lib/form/interface';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import './Configurator.css';
 
 function Configurator() {
   const dispatch = useDispatch();
-  const [x, setX] = useState(20);
-  const [y, setY] = useState(20);
-  const [players, setPlayers] = useState(['player1', 'player2']);
-  const playersHandler = (value: string, index: number) => {
-    const newPlayers = players.map((item, i) => {
-      if (i === index) return value;
-      else return item;
-    });
-    setPlayers(newPlayers);
-  };
-  const submit = () => {
-    if (x < 20 || y < 20 || x > 45 || y > 45) return;
-    dispatch(setConfig({ players, x, y }));
-  };
+  const submit = ({ x, y, players }: Store) => dispatch(setConfig({ x, y, players }));
   return (
-    <div className='configurator'>
-      <InputNumber min={20} max={45} value={x} onChange={(e) => setX(Number(e))} type='number' />
-      <InputNumber min={20} max={45} value={y} onChange={(e) => setY(Number(e))} type='number' />
-      <div className='players'></div>
-      {players.map((item, i) => (
-        <div className='players__item' key={i}>
-          <Input type='text' value={item} onChange={(e) => playersHandler(e.target.value, i)} />
-          <Button
-            type='primary'
-            danger
-            disabled={players.length <= 2}
-            onClick={(e) => setPlayers(players.filter((player, index) => index !== i))}>
-            X
-          </Button>
-        </div>
-      ))}
-      <Button
-        type='primary'
-        block
-        disabled={players.length >= 4}
-        onClick={(e) => setPlayers([...players, `player${players.length + 1}`])}>
-        add player
-      </Button>
-      <Button type='primary' block onClick={submit}>
-        submit config
-      </Button>
-    </div>
+    <Form
+      initialValues={{ x: 20, y: 20, players: ['Player 1', 'Player 2'] }}
+      onFinish={submit}
+      className='configurator'>
+      <Card title={'Configurator'}>
+        <Space direction='vertical'>
+          <Form.Item
+            {...layout}
+            label='Cells horizontaly'
+            name='y'
+            rules={[{ required: true, message: 'Please, input Y cells' }]}>
+            <InputNumber min={20} max={45} />
+          </Form.Item>
+          <Form.Item
+            {...layout}
+            label='Cells verticaly'
+            name='x'
+            rules={[{ required: true, message: 'Please, input X cells' }]}>
+            <InputNumber min={20} max={45} />
+          </Form.Item>
+          <Form.List name='players'>
+            {(fields, { add, remove }) => {
+              return (
+                <div style={{ minHeight: 224, minWidth: 270 }}>
+                  {fields.map((field, index) => (
+                    <Form.Item label={`Player ${index + 1}`} required={true} key={field.key}>
+                      <Form.Item
+                        {...field}
+                        rules={[{ required: true, message: `Please input player's name.` }]}
+                        noStyle>
+                        <Input placeholder='player name' style={{ width: '90%' }} />
+                      </Form.Item>
+                      {fields.length > 2 ? (
+                        <MinusCircleOutlined style={{ marginLeft: 5 }} onClick={() => remove(field.name)} />
+                      ) : null}
+                    </Form.Item>
+                  ))}
+                  {fields.length < 4 ? (
+                    <Form.Item>
+                      <Button type='dashed' onClick={() => add()}>
+                        <PlusOutlined /> Add player
+                      </Button>
+                    </Form.Item>
+                  ) : null}
+                </div>
+              );
+            }}
+          </Form.List>
+
+          <Form.Item>
+            <Button type='primary' block htmlType='submit'>
+              Submit
+            </Button>
+          </Form.Item>
+        </Space>
+      </Card>
+    </Form>
   );
 }
 
 export default Configurator;
+
+const layout = {
+  labelCol: { span: 12 },
+  wrapperCol: { span: 12 },
+};

@@ -29,17 +29,18 @@ function GameField() {
     else {
       const mouseOverCellX = (currentFigureX - geometry.left) / cellSide;
       const mouseOverCellY = (currentFigureY - geometry.top) / cellSide;
-      const rectangleCoordinates = setRectangleCells(mouseOverCellX, mouseOverCellY, dice);
-      //Если фигура залазит за край поля, выходим
-      if (isOverEdge(rectangleCoordinates, config)) return;
-      //Если первый ход и не в углу, выходим
+      const rectCoord = setRectangleCells(mouseOverCellX, mouseOverCellY, dice);
       const isFM = isFirstMove(currentPlayer?.count);
-      if (isFM && !isInCorner(rectangleCoordinates, config)) return;
-      if (!isInsertByRules(fieldMatrix, rectangleCoordinates, currentPlayer, isFM)) return;
-
-      const newFieldMatrix = fillFieldMatrix(fieldMatrix, rectangleCoordinates, currentPlayer);
-      if (!isFM) autofilling(newFieldMatrix, currentPlayer.color);
-      dispatch(setTempFieldMatrix(newFieldMatrix));
+      //Если фигура залазит за край поля, выходим
+      if (isOverEdge(rectCoord, config)) dispatch(setTempFieldMatrix(fieldMatrix));
+      //Если первый ход и не в углу, выходим
+      else if (isFM && !isInCorner(rectCoord, config)) dispatch(setTempFieldMatrix(fieldMatrix));
+      //Проверка по правилам ли вставка
+      else if (!isInsertByRules(fieldMatrix, rectCoord, currentPlayer, isFM)) dispatch(setTempFieldMatrix(fieldMatrix));
+      else {
+        const newFieldMatrix = fillFieldMatrix(fieldMatrix, rectCoord, currentPlayer.color, isFM);
+        dispatch(setTempFieldMatrix(newFieldMatrix));
+      }
     }
   }, [
     currentFigureX,
@@ -54,7 +55,10 @@ function GameField() {
         tempFieldMatrix.map((item, index) => (
           <div key={index} className='game-field__row'>
             {item.map((item, index) => (
-              <span key={index} style={{ backgroundColor: item || '' }} className='game-field__cell'></span>
+              <span
+                key={index}
+                style={{ backgroundColor: item?.color || '', opacity: item?.opacity }}
+                className='game-field__cell'></span>
             ))}
           </div>
         ))}
@@ -112,20 +116,21 @@ const isInsertByRules = (field: GameArray, figure: iRectangleCells, player: iPla
     return acc;
   }, []);
   if (cellsUnderFigure.filter((item) => item).length > 0) return false;
-  if (siblingCells.filter((item) => item === player.color).length > 0) return true;
+  if (siblingCells.filter((item) => item?.color === player.color).length > 0) return true;
   return false;
 };
 
-const fillFieldMatrix = (fieldMatrix: GameArray, rectCoord: iRectangleCells, currentPlayer: iPlayer) => {
+const fillFieldMatrix = (fieldMatrix: GameArray, rectCoord: iRectangleCells, color: PlayerColor, isFM: boolean) => {
   const newFieldMatrix = fieldMatrix.map((item, indexY) => {
     if (rectCoord.yStart <= indexY && indexY < rectCoord.yEnd) {
       return item.map((item, indexX) => {
-        if (rectCoord.xStart <= indexX && indexX < rectCoord.xEnd) return currentPlayer.color;
-        return item;
+        if (rectCoord.xStart <= indexX && indexX < rectCoord.xEnd) return { color: color, opacity: 1 };
+        return item ? Object.assign({}, item) : null;
       });
     }
     return item.slice();
   });
+  if (!isFM) autofilling(newFieldMatrix, color);
   return newFieldMatrix;
 };
 
@@ -139,7 +144,7 @@ interface iRectangleCells {
 const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   const boolArr = fieldMatrix.map((itemY, iY) => {
     return itemY.map((itemX, iX) => {
-      if (itemX === color) return true;
+      if (itemX?.color === color) return true;
       if (itemX === null) return null;
       else return false;
     });
@@ -148,7 +153,7 @@ const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
     let a = fillTrue(boolArr);
     a.forEach((item, iY) =>
       item.forEach((item, iX) => {
-        if (item === true) fieldMatrix[iY][iX] = color;
+        if (item === true) fieldMatrix[iY][iX] = { color, opacity: 1 };
       })
     );
   }

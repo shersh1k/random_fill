@@ -33,10 +33,12 @@ function ControlPanel() {
     [dispatch]
   );
   const clickHandlerRoll = () => {
+    if (!currentPlayer?.color) return;
     setRollDiceDone(true);
     dispatch(rollTheDice(currentPlayer?.color));
   };
   const clickHandlerRotate = () => {
+    if (!currentPlayer?.color) return;
     dispatch(rotateFigure(dices || [1, 1], currentPlayer?.color));
   };
   const onMouseDownHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -87,7 +89,7 @@ function ControlPanel() {
     const nextPlayer = players[nextPlayerIndex] || players[0];
     setStepDone(false);
     setRollDiceDone(false);
-    currentPlayer.count = tempFieldMatrix.flat().filter((item) => item === currentPlayer.color).length;
+    currentPlayer.count = tempFieldMatrix.flat().filter((item) => item?.color === currentPlayer.color).length;
     dispatch(setPlayer(Object.assign({}, currentPlayer)));
     dispatch(setPlayer(nextPlayer));
   };
@@ -111,7 +113,7 @@ function ControlPanel() {
               {item.map((item, index) => (
                 <span
                   key={index}
-                  style={{ backgroundColor: stepDone ? 'grey' : item || '' }}
+                  style={{ backgroundColor: stepDone ? 'grey' : item?.color || '' }}
                   className='new-figure__cell'></span>
               ))}
             </div>

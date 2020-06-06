@@ -30,7 +30,11 @@ export interface iPlayer {
   color: PlayerColor;
   count: number;
 }
-export type GameArray = Array<Array<PlayerColor | null>>;
+export type GameArray = Array<Array<TCell | null>>;
+export interface TCell {
+  color: PlayerColor;
+  opacity: number;
+}
 export type PlayerColor = 'Red' | 'Green' | 'Yellow' | 'Blue';
 export type Dices = [Dice, Dice];
 export type Dice = 1 | 2 | 3 | 4 | 5 | 6;
