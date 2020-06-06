@@ -1,6 +1,12 @@
 ## Description
 
-One boring quarantine evening lazily leafing through memes came across the following picture ![alt text](https://github.com/shersh1k/random_fill/src/assets/rules.jpg), which resulted in this game
+One boring quarantine evening lazily leafing through memes came across the ![following picture](https://raw.githubusercontent.com/shersh1k/random_fill/master/src/assets/rules.jpg)
+
+which resulted in this game.
+
+After I spent hours developing a more or less viable version, and after playing this version, I realized that the game is disastrously boring :(
+
+But it didn’t matter anymore :)
 
 ## Available Scripts
 
