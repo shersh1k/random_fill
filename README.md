@@ -5,6 +5,7 @@ One boring quarantine evening lazily leafing through memes came across the ![fol
 which resulted in this game.
 
 After I spent hours developing a more or less viable version, and after playing this version, I realized that the game is disastrously boring :(
+
 But it didn’t matter anymore :)
 
 ## Available Scripts
