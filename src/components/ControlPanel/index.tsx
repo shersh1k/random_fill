@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import './ControlPanel.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,7 +11,6 @@ import {
 } from '../../store/game/actions';
 import { iState } from '../../store';
 import { Button } from 'antd';
-import { GameArray, PlayerColor } from '../../store/game/types';
 
 function ControlPanel() {
   const newFigureRef = useRef<HTMLDivElement>(null);
@@ -24,12 +23,15 @@ function ControlPanel() {
   const [stepDone, setStepDone] = useState(false);
   const [rollDiceDone, setRollDiceDone] = useState(false);
   const dispatch = useDispatch();
-  const mouseMoveHandler = useCallback((e: MouseEvent) => {
-    if (!newFigureRef.current) return;
-    newFigureRef.current.style.left = e.pageX - newFigureRef.current.offsetWidth / 2 + 'px';
-    newFigureRef.current.style.top = e.pageY - newFigureRef.current.offsetHeight / 2 + 'px';
-    dispatch(setFigurePosition(e.x, e.y));
-  }, []);
+  const mouseMoveHandler = useCallback(
+    (e: MouseEvent) => {
+      if (!newFigureRef.current) return;
+      newFigureRef.current.style.left = e.pageX - newFigureRef.current.offsetWidth / 2 + 'px';
+      newFigureRef.current.style.top = e.pageY - newFigureRef.current.offsetHeight / 2 + 'px';
+      dispatch(setFigurePosition(e.x, e.y));
+    },
+    [dispatch]
+  );
   const clickHandlerRoll = () => {
     setRollDiceDone(true);
     dispatch(rollTheDice(currentPlayer?.color));
@@ -126,37 +128,3 @@ function ControlPanel() {
 }
 
 export default ControlPanel;
-/* 
-const autofill = (gameField: GameArray, color: PlayerColor) => {
-  // const newGameField = gameField.map()
-  gameField.forEach((itemY, iY, arrY) => {
-    itemY.forEach((itemX, iX, arrX) => {
-      if (itemX === null && canBeFilled(arrY, iX, iY, color)) {
-        debugger;
-      }
-    });
-  });
-};
-
-const canBeFilled = (gameField: GameArray, iX: number, iY: number, col: PlayerColor) => {
-  if (checkSiblings(gameField, iX, iY, col)) return true;
-  return false;
-};
-
-const checkSiblings = (gameField: GameArray, iX: number, iY: number, col: PlayerColor): boolean => {
-  const left = gameField[iY]?.[iX - 1];
-  const right = gameField[iY]?.[iX + 1];
-  const up = gameField[iY - 1]?.[iX];
-  const bottom = gameField[iY + 1]?.[iX];
-  if (!byRule(left, col) || !byRule(right, col) || !byRule(up, col) || !byRule(bottom, col)) return false;
-  return (
-    (left === undefined || checkSiblings(gameField, iX - 1, iY, col)) &&
-    (right === undefined || checkSiblings(gameField, iX + 1, iY, col)) &&
-    (up === undefined || checkSiblings(gameField, iX, iY - 1, col)) &&
-    (bottom === undefined || checkSiblings(gameField, iX, iY + 1, col))
-  );
-};
-
-const byRule = (cell: PlayerColor | null | undefined, color: PlayerColor) =>
-  cell === undefined || cell === null || cell === color;
- */

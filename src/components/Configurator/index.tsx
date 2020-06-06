@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './Configurator.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { rollTheDice, rotateFigure, setConfig } from '../../store/game/actions';
-import { iState } from '../../store';
+import { useDispatch } from 'react-redux';
+import { setConfig } from '../../store/game/actions';
 import { Button, Input, InputNumber } from 'antd';
 
 function Configurator() {

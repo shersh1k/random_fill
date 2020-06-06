@@ -41,7 +41,13 @@ function GameField() {
       if (!isFM) autofilling(newFieldMatrix, currentPlayer.color);
       dispatch(setTempFieldMatrix(newFieldMatrix));
     }
-  }, [currentFigureX, currentFigureY]);
+  }, [
+    currentFigureX,
+    currentFigureY,
+    cellSide,
+    config,
+    dispatch /*currentPlayer, dice, fieldMatrix, geometry, tempFieldMatrix */,
+  ]);
   return (
     <div ref={fieldMatrixRef} className='game-field'>
       {tempFieldMatrix &&
@@ -140,7 +146,6 @@ const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   });
   if (boolArr.filter((item) => item.filter((item) => item === false).length).length) {
     let a = fillTrue(boolArr);
-    console.log(a);
     a.forEach((item, iY) =>
       item.forEach((item, iX) => {
         if (item === true) fieldMatrix[iY][iX] = color;
@@ -149,7 +154,7 @@ const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   }
 };
 
-const fillTrue = (gameField: Array<Array<TCell>>): TCell[][] => {
+const fillTrue = (gameField: Array<Array<TCellContent>>): TCellContent[][] => {
   gameField.forEach((itemY, iY) =>
     itemY.forEach((itemX, iX) => {
       if (gameField[iY][iX] === false) return;
@@ -166,19 +171,15 @@ const fillTrue = (gameField: Array<Array<TCell>>): TCell[][] => {
   return gameField;
 };
 
-const checkSiblings = (gameField: Array<Array<TCell>>, { x, y }: iPosition): boolean => {
-  console.log(x, y);
+const checkSiblings = (gameField: Array<Array<TCellContent>>, { x, y }: iPosition): boolean => {
+  if (gameField[y][x] === true || isInsideField(x, y, gameField)) return true;
 
-  if (y < 0 || x < 0 || y >= gameField.length || x >= gameField[0].length) return true;
-  if (gameField[y][x] === true) return true;
-
-  const top = new Cell(x, y - 1, 'top');
-  const right = new Cell(x + 1, y, 'right');
-  const bottom = new Cell(x, y + 1, 'bottom');
-  const left = new Cell(x - 1, y, 'left');
-
+  const top = new Cell(x, y - 1);
+  const right = new Cell(x + 1, y);
+  const bottom = new Cell(x, y + 1);
+  const left = new Cell(x - 1, y);
   const siblingCellsArr = [top, right, bottom, left];
-  const currentContents = siblingCellsArr.map((item) => ({ ...item, content: item.currentContent(gameField) }));
+
   if (siblingCellsArr.filter((item) => item.currentContent(gameField) === false).length > 0) {
     siblingCellsArr.forEach((item) => {
       if (item.currentContent(gameField) !== undefined && item.currentContent(gameField) !== true)
@@ -203,30 +204,32 @@ const checkSiblings = (gameField: Array<Array<TCell>>, { x, y }: iPosition): boo
       if (item.currentContent(gameField) === null) {
         return checkSiblings(gameField, { x: item.x, y: item.y });
       }
+      return false;
     });
     return arr.length >= 4;
   }
 };
 
-const byRule = (cell: boolean | undefined) => cell === undefined || cell === null;
+const isInsideField = (x: number, y: number, field: TCellContent[][]) => {
+  if (y < 0 || x < 0 || y >= field.length || x >= field[0].length) return true;
+  return false;
+};
 
 interface iPosition {
   x: number;
   y: number;
 }
 
-type TCell = boolean | '?' | null;
+type TCellContent = boolean | '?' | null;
 
 class Cell {
   x: number;
   y: number;
-  type: 'top' | 'right' | 'bottom' | 'left';
-  constructor(x: number, y: number, type: 'top' | 'right' | 'bottom' | 'left') {
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
-    this.type = type;
   }
-  currentContent = (gameField: TCell[][]) => {
+  currentContent = (gameField: TCellContent[][]) => {
     return gameField[this.y]?.[this.x];
   };
 }

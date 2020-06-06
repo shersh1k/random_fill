@@ -10,7 +10,6 @@ import {
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
 } from './types';
-import { makeFieldMatrix } from '../../Utils';
 
 const initialState: GameState = {
   config: null,
