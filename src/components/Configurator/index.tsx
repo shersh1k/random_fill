@@ -43,13 +43,17 @@ function Configurator() {
                         <Input placeholder='player name' style={{ width: '90%' }} />
                       </Form.Item>
                       {fields.length > 2 ? (
-                        <MinusCircleOutlined style={{ marginLeft: 5 }} onClick={() => remove(field.name)} />
+                        <MinusCircleOutlined
+                          style={{ marginLeft: 5 }}
+                          title='Remove player'
+                          onClick={() => remove(field.name)}
+                        />
                       ) : null}
                     </Form.Item>
                   ))}
                   {fields.length < 4 ? (
                     <Form.Item>
-                      <Button type='dashed' onClick={() => add()}>
+                      <Button title='Add player' type='dashed' onClick={() => add()}>
                         <PlusOutlined /> Add player
                       </Button>
                     </Form.Item>
@@ -60,8 +64,8 @@ function Configurator() {
           </Form.List>
 
           <Form.Item>
-            <Button type='primary' block htmlType='submit'>
-              Submit
+            <Button type='primary' block htmlType='submit' title='Start game'>
+              Start
             </Button>
           </Form.Item>
         </Space>

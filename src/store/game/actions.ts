@@ -16,7 +16,7 @@ import {
   SET_PLAYER,
   GameArray,
 } from './types';
-import { getRandomInt, makeFieldMatrix } from '../../Utils';
+import { getRandomInt, makeFieldMatrix } from '../../Helpers';
 
 export function rollTheDice(playerColor?: PlayerColor) {
   return function (dispatch: Dispatch<GameActionTypes>) {

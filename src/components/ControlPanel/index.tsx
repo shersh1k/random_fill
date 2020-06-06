@@ -1,6 +1,14 @@
 import React, { useRef, useState, useCallback } from 'react';
-import './ControlPanel.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Card, Popconfirm, Space } from 'antd';
+import {
+  UndoOutlined,
+  RotateRightOutlined,
+  FastForwardOutlined,
+  CaretRightOutlined,
+  FallOutlined,
+} from '@ant-design/icons';
+import { iState } from '../../store';
 import {
   rollTheDice,
   rotateFigure,
@@ -9,8 +17,9 @@ import {
   setTempFieldMatrix,
   setPlayer,
 } from '../../store/game/actions';
-import { iState } from '../../store';
-import { Button } from 'antd';
+
+import './ControlPanel.css';
+import Title from './Title';
 
 function ControlPanel() {
   const newFigureRef = useRef<HTMLDivElement>(null);
@@ -55,7 +64,6 @@ function ControlPanel() {
     newFigureRef.current.style.top = 'auto';
     newFigureRef.current.style.left = 'auto';
     const isDifferent = tempFieldMatrix?.join() !== fieldMatrix?.join();
-    // if (tempFieldMatrix && currentPlayer && currentPlayer.count) autofill(tempFieldMatrix, currentPlayer.color);
     if (tempFieldMatrix && isDifferent) {
       setStepDone(true);
     }
@@ -103,38 +111,64 @@ function ControlPanel() {
     dispatch(setPlayer(nextPlayer));
   };
   return (
-    <div className='curent-step'>
-      <div>{currentPlayer?.name}</div>
-      <div>{currentPlayer?.count}</div>
-      <Button disabled={rollDiceDone} type='primary' onClick={clickHandlerRoll}>
-        roll the dice
-      </Button>
-      <Button type='primary' disabled={!dices} onClick={clickHandlerRotate}>
-        rotate
-      </Button>
-      <Button onClick={passHandler}>pass</Button>
-      <div>{dices && dices[1]}</div>
-      <div>{dices && dices[0]}</div>
-      <div ref={newFigureRef} className='new-figure' onMouseDown={onMouseDownHandler} onMouseUp={onMouseUpHandler}>
-        {currentFigure &&
-          currentFigure.map((item, index) => (
-            <div key={index} className='new-figure__row'>
-              {item.map((item, index) => (
-                <span
-                  key={index}
-                  style={{ backgroundColor: stepDone ? 'grey' : item?.color || '', zIndex: 100 }}
-                  className='new-figure__cell'></span>
-              ))}
-            </div>
-          ))}
+    <Card
+      style={{ position: 'static' }}
+      title={<Title player={currentPlayer} />}
+      actions={[
+        <Button
+          type='link'
+          title='Undo'
+          icon={<UndoOutlined style={{ fontSize: '28px', color: '#ff4d4f' }} />}
+          disabled={!stepDone}
+          onClick={undoHandler}
+          key='undo'
+        />,
+        <Button
+          type='link'
+          title='Submit move'
+          icon={<CaretRightOutlined style={{ fontSize: '28px', color: 'green' }} />}
+          disabled={!stepDone}
+          onClick={submitHandler}
+          key='submit'
+        />,
+      ]}>
+      <Space style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button
+          type='primary'
+          size='large'
+          title='Roll dice/Get figure'
+          disabled={rollDiceDone}
+          onClick={clickHandlerRoll}
+          icon={<FallOutlined />}
+        />
+        <Button
+          title='Rotate figure'
+          type='primary'
+          size='large'
+          disabled={!dices}
+          onClick={clickHandlerRotate}
+          icon={<RotateRightOutlined />}
+        />
+        <Popconfirm title='Are you sure to skip move' onConfirm={passHandler}>
+          <Button danger title='Skipping' size='large' icon={<FastForwardOutlined />} />
+        </Popconfirm>
+      </Space>
+      <div className='new-figure-wrapper'>
+        <div className='new-figure' ref={newFigureRef} onMouseDown={onMouseDownHandler} onMouseUp={onMouseUpHandler}>
+          {currentFigure &&
+            currentFigure.map((item, index) => (
+              <div key={index} className='new-figure__row'>
+                {item.map((item, index) => (
+                  <span
+                    key={index}
+                    style={{ backgroundColor: stepDone ? 'grey' : item?.color || '', zIndex: 100 }}
+                    className='new-figure__cell'></span>
+                ))}
+              </div>
+            ))}
+        </div>
       </div>
-      {stepDone && (
-        <>
-          <Button onClick={undoHandler}>undo</Button>
-          <Button onClick={submitHandler}>submit</Button>
-        </>
-      )}
-    </div>
+    </Card>
   );
 }
 

@@ -5,7 +5,13 @@
   flex-direction: column;
   align-items: center;
 }
-
+.new-figure-wrapper {
+  min-width: 150px;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .new-figure {
   cursor: pointer;
 }

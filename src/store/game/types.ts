@@ -30,8 +30,8 @@ export interface iPlayer {
   color: PlayerColor;
   count: number;
 }
-export type GameArray = Array<Array<TCell | null>>;
-export interface TCell {
+export type GameArray = Array<Array<TypeCell | null>>;
+export interface TypeCell {
   color: PlayerColor;
   opacity: number;
 }
