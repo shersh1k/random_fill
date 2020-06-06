@@ -1,6 +1,6 @@
 ## Description
 
-One boring quarantine evening lazily leafing through memes came across the ![following picture](https://github.com/shersh1k/random_fill/tree/master/src/assets/rules.jpg?raw=true), which resulted in this game
+One boring quarantine evening lazily leafing through memes came across the ![following picture](https://raw.githubusercontent.com/shersh1k/random_fill/master/src/assets/rules.jpg), which resulted in this game
 
 ## Available Scripts
 
