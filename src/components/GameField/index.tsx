@@ -124,7 +124,7 @@ const fillFieldMatrix = (fieldMatrix: GameArray, rectCoord: iRectangleCells, col
   const newFieldMatrix = fieldMatrix.map((item, indexY) => {
     if (rectCoord.yStart <= indexY && indexY < rectCoord.yEnd) {
       return item.map((item, indexX) => {
-        if (rectCoord.xStart <= indexX && indexX < rectCoord.xEnd) return { color: color, opacity: 1 };
+        if (rectCoord.xStart <= indexX && indexX < rectCoord.xEnd) return { color: color, opacity: 0.5 };
         return item ? Object.assign({}, item) : null;
       });
     }
@@ -144,30 +144,33 @@ interface iRectangleCells {
 const autofilling = (fieldMatrix: GameArray, color: PlayerColor) => {
   const boolArr = fieldMatrix.map((itemY, iY) => {
     return itemY.map((itemX, iX) => {
-      if (itemX?.color === color) return true;
-      if (itemX === null) return null;
-      else return false;
+      if (itemX?.color === color) return new TCell(true, itemX.opacity);
+      if (itemX === null) return new TCell(null, 1);
+      else return new TCell(false, itemX.opacity);
     });
   });
-  if (boolArr.filter((item) => item.filter((item) => item === false).length).length) {
+  if (boolArr.filter((item) => item.filter((item) => item.content === false).length).length) {
     let a = fillTrue(boolArr);
     a.forEach((item, iY) =>
       item.forEach((item, iX) => {
-        if (item === true) fieldMatrix[iY][iX] = { color, opacity: 1 };
+        if (item.content === true) fieldMatrix[iY][iX] = { color, opacity: item.opacity };
       })
     );
   }
 };
 
-const fillTrue = (gameField: Array<Array<TCellContent>>): TCellContent[][] => {
+const fillTrue = (gameField: Array<Array<TCell>>): TCell[][] => {
   gameField.forEach((itemY, iY) =>
     itemY.forEach((itemX, iX) => {
-      if (gameField[iY][iX] === false) return;
+      if (gameField[iY][iX].content === false) return;
       else {
         checkSiblings(gameField, { y: iY, x: iX });
         gameField.forEach((item, iY) =>
           item.forEach((item, iX) => {
-            if (item === '?') gameField[iY][iX] = true;
+            if (item.content === '?') {
+              gameField[iY][iX].content = true;
+              gameField[iY][iX].opacity = 0.5;
+            }
           })
         );
       }
@@ -176,8 +179,8 @@ const fillTrue = (gameField: Array<Array<TCellContent>>): TCellContent[][] => {
   return gameField;
 };
 
-const checkSiblings = (gameField: Array<Array<TCellContent>>, { x, y }: iPosition): boolean => {
-  if (gameField[y][x] === true || isInsideField(x, y, gameField)) return true;
+const checkSiblings = (gameField: Array<Array<TCell>>, { x, y }: iPosition): boolean => {
+  if (gameField[y][x].content === true || isInsideField(x, y, gameField)) return true;
 
   const top = new Cell(x, y - 1);
   const right = new Cell(x + 1, y);
@@ -185,28 +188,28 @@ const checkSiblings = (gameField: Array<Array<TCellContent>>, { x, y }: iPositio
   const left = new Cell(x - 1, y);
   const siblingCellsArr = [top, right, bottom, left];
 
-  if (siblingCellsArr.filter((item) => item.currentContent(gameField) === false).length > 0) {
+  if (siblingCellsArr.filter((item) => item.currentContent(gameField)?.content === false).length > 0) {
     siblingCellsArr.forEach((item) => {
-      if (item.currentContent(gameField) !== undefined && item.currentContent(gameField) !== true)
-        gameField[item.y][item.x] = false;
+      if (item.currentContent(gameField) !== undefined && item.currentContent(gameField).content !== true)
+        gameField[item.y][item.x].content = false;
     });
-    if (gameField[y][x] !== undefined && gameField[y][x] !== true) gameField[y][x] = false;
+    if (gameField[y][x] !== undefined && gameField[y][x].content !== true) gameField[y][x].content = false;
     gameField.forEach((item, iY) =>
       item.forEach((item, iX) => {
-        if (item === '?') gameField[iY][iX] = false;
+        if (item.content === '?') gameField[iY][iX].content = false;
       })
     );
     return false;
   } else {
-    gameField[y][x] = '?';
+    gameField[y][x].content = '?';
     const arr = siblingCellsArr.filter((item) => {
       if (
         item.currentContent(gameField) === undefined ||
-        item.currentContent(gameField) === true ||
-        item.currentContent(gameField) === '?'
+        item.currentContent(gameField).content === true ||
+        item.currentContent(gameField).content === '?'
       )
         return true;
-      if (item.currentContent(gameField) === null) {
+      if (item.currentContent(gameField).content === null) {
         return checkSiblings(gameField, { x: item.x, y: item.y });
       }
       return false;
@@ -215,7 +218,7 @@ const checkSiblings = (gameField: Array<Array<TCellContent>>, { x, y }: iPositio
   }
 };
 
-const isInsideField = (x: number, y: number, field: TCellContent[][]) => {
+const isInsideField = (x: number, y: number, field: TCell[][]) => {
   if (y < 0 || x < 0 || y >= field.length || x >= field[0].length) return true;
   return false;
 };
@@ -225,7 +228,14 @@ interface iPosition {
   y: number;
 }
 
-type TCellContent = boolean | '?' | null;
+class TCell {
+  content: boolean | '?' | null;
+  opacity: number;
+  constructor(content: boolean | '?' | null, opacity: number) {
+    this.content = content;
+    this.opacity = opacity;
+  }
+}
 
 class Cell {
   x: number;
@@ -234,7 +244,7 @@ class Cell {
     this.x = x;
     this.y = y;
   }
-  currentContent = (gameField: TCellContent[][]) => {
+  currentContent = (gameField: TCell[][]) => {
     return gameField[this.y]?.[this.x];
   };
 }

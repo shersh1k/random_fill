@@ -82,7 +82,16 @@ function ControlPanel() {
     if (!players || !currentPlayer || !tempFieldMatrix) return;
     const isDifferent = tempFieldMatrix?.join() !== fieldMatrix?.join();
     if (tempFieldMatrix && isDifferent) {
-      dispatch(setFieldMatrix(tempFieldMatrix));
+      dispatch(
+        setFieldMatrix(
+          tempFieldMatrix.map((item) =>
+            item.map((item) => {
+              if (item) item.opacity = 1;
+              return item;
+            })
+          )
+        )
+      );
     }
     const playerIndex = players.findIndex((item) => item.name === currentPlayer.name);
     const nextPlayerIndex = playerIndex + 1;
@@ -113,7 +122,7 @@ function ControlPanel() {
               {item.map((item, index) => (
                 <span
                   key={index}
-                  style={{ backgroundColor: stepDone ? 'grey' : item?.color || '' }}
+                  style={{ backgroundColor: stepDone ? 'grey' : item?.color || '', zIndex: 100 }}
                   className='new-figure__cell'></span>
               ))}
             </div>
