@@ -1,3 +1,4 @@
+# [LINK TO GAME](https://shersh1k.github.io/random_fill/)
 ## Description
 
 One boring quarantine evening lazily leafing through memes came across the ![following picture](https://raw.githubusercontent.com/shersh1k/random_fill/master/src/assets/rules.jpg)
