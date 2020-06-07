@@ -9,13 +9,14 @@ import {
   SET_CONFIG,
   iPlayer,
   PlayerColor,
+  GameArray,
   SET_FIGURE_POSITION,
   SET_FIELD_MATRIX,
   SET_FINAL_FIGURE_POSITION,
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
-  GameArray,
   SET_CELL_SIDES,
+  SET_NEW_GAME,
 } from './types';
 import { getRandomInt, makeFieldMatrix } from '../../Helpers';
 
@@ -114,6 +115,15 @@ export function setCellSides(width: number, height: number) {
       type: SET_CELL_SIDES,
       cellWidth: width,
       cellHeight: height,
+    });
+  };
+}
+
+export function setNewGame() {
+  return function (dispatch: Dispatch<GameActionTypes>) {
+    dispatch({
+      type: SET_NEW_GAME,
+      config: null,
     });
   };
 }

@@ -7,6 +7,8 @@ export const SET_TEMP_FIELD_MATRIX = 'SET_TEMP_FIELD_MATRIX';
 export const SET_FINAL_FIGURE_POSITION = 'SET_FINAL_FIGURE_POSITION';
 export const SET_PLAYER = 'SET_PLAYER';
 export const SET_CELL_SIDES = 'SET_CELL_SIDES';
+export const SET_NEW_GAME = 'SET_NEW_GAME';
+
 export interface GameState {
   config: iConfig | null;
   cellWidth: number;
@@ -93,6 +95,11 @@ interface SetCellSides {
   cellHeight: number;
 }
 
+interface SetNewGame {
+  type: typeof SET_NEW_GAME;
+  config: iConfig | null;
+}
+
 export type GameActionTypes =
   | RollTheDice
   | RotateFigure
@@ -102,4 +109,5 @@ export type GameActionTypes =
   | SetFinalFigurePosition
   | SetTempFieldMatrix
   | SetPlayer
-  | SetCellSides;
+  | SetCellSides
+  | SetNewGame;

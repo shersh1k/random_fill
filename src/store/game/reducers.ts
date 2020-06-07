@@ -10,6 +10,7 @@ import {
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
   SET_CELL_SIDES,
+  SET_NEW_GAME,
 } from './types';
 
 const initialState: GameState = {
@@ -45,6 +46,8 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
     case SET_PLAYER:
       return { ...state, ...action };
     case SET_CELL_SIDES:
+      return { ...state, ...action };
+    case SET_NEW_GAME:
       return { ...state, ...action };
     default:
       return state;

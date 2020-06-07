@@ -8,7 +8,7 @@ import {
   CaretRightOutlined,
   FallOutlined,
 } from '@ant-design/icons';
-import { iState } from '../../store';
+import { iState, store } from '../../store';
 import {
   rollTheDice,
   rotateFigure,
@@ -16,6 +16,7 @@ import {
   setFieldMatrix,
   setTempFieldMatrix,
   setPlayer,
+  setNewGame,
 } from '../../store/game/actions';
 
 import './ControlPanel.css';
@@ -95,7 +96,9 @@ function ControlPanel() {
     if (tempFieldMatrix && isDifferent) {
       dispatch(
         setFieldMatrix(
-          tempFieldMatrix.map((item) =>
+          tempFieldMatrix.map((
+            item //filling opacity to 1;
+          ) =>
             item.map((item) => {
               if (item) item.opacity = 1;
               return item;
@@ -112,6 +115,12 @@ function ControlPanel() {
     currentPlayer.count = tempFieldMatrix.flat().filter((item) => item?.color === currentPlayer.color).length;
     dispatch(setPlayer(Object.assign({}, currentPlayer)));
     dispatch(setPlayer(nextPlayer));
+    const emptyCells = tempFieldMatrix.flat().filter((item) => item === null).length;
+    const sortByCount = players.slice().sort((a, b) => b.count - a.count);
+    if (emptyCells < sortByCount[0].count - sortByCount[1].count) {
+      alert(`PLAYER ${sortByCount[0].name} WIN`);
+      dispatch(setNewGame());
+    }
   };
   return (
     <Card
