@@ -36,8 +36,8 @@ P.S This project was bootstrapped with [Create React App](https://github.com/fac
 <ul>
 <li>
   <ul>
-    <li>TODO: fix bug if X !== Y</li>
     <li>TODO: autoWin(when nullCells < difference between players)</li>
+    <li>TODO: init backend project</li>
   </ul>
 </li>
 <li>TODO: USE react-jss</li>
