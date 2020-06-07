@@ -9,11 +9,13 @@ import {
   SET_FINAL_FIGURE_POSITION,
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
+  SET_CELL_SIDES,
 } from './types';
 
 const initialState: GameState = {
   config: null,
-  cellSide: 20,
+  cellWidth: 0,
+  cellHeight: 0,
   fieldMatrix: null,
   tempFieldMatrix: null,
   dice: null,
@@ -42,7 +44,8 @@ export function gameReducer(state = initialState, action: GameActionTypes) {
       return { ...state, ...action };
     case SET_PLAYER:
       return { ...state, ...action };
-
+    case SET_CELL_SIDES:
+      return { ...state, ...action };
     default:
       return state;
   }

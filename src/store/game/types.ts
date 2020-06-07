@@ -6,10 +6,11 @@ export const SET_FIELD_MATRIX = 'SET_FIELD_MATRIX';
 export const SET_TEMP_FIELD_MATRIX = 'SET_TEMP_FIELD_MATRIX';
 export const SET_FINAL_FIGURE_POSITION = 'SET_FINAL_FIGURE_POSITION';
 export const SET_PLAYER = 'SET_PLAYER';
-
+export const SET_CELL_SIDES = 'SET_CELL_SIDES';
 export interface GameState {
   config: iConfig | null;
-  cellSide: number;
+  cellWidth: number;
+  cellHeight: number;
   fieldMatrix: GameArray | null;
   tempFieldMatrix: GameArray | null;
   dice: Dices | null;
@@ -86,6 +87,12 @@ interface SetPlayer {
   currentPlayer: iPlayer | null;
 }
 
+interface SetCellSides {
+  type: typeof SET_CELL_SIDES;
+  cellWidth: number;
+  cellHeight: number;
+}
+
 export type GameActionTypes =
   | RollTheDice
   | RotateFigure
@@ -94,4 +101,5 @@ export type GameActionTypes =
   | SetFieldMatrix
   | SetFinalFigurePosition
   | SetTempFieldMatrix
-  | SetPlayer;
+  | SetPlayer
+  | SetCellSides;

@@ -19,14 +19,14 @@ function Configurator() {
           <Form.Item
             {...layout}
             label='Cells horizontaly'
-            name='y'
+            name='x'
             rules={[{ required: true, message: 'Please, input Y cells' }]}>
             <InputNumber min={20} max={45} />
           </Form.Item>
           <Form.Item
             {...layout}
             label='Cells verticaly'
-            name='x'
+            name='y'
             rules={[{ required: true, message: 'Please, input X cells' }]}>
             <InputNumber min={20} max={45} />
           </Form.Item>

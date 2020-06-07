@@ -2,7 +2,7 @@ import { Dice, PlayerColor, GameArray, TypeCell, iConfig, Dices, iPlayer } from 
 import { TCell, Cell } from '.';
 import { iPosition, iRectangleCells } from './interfaces';
 
-export function makeFieldMatrix(x: number, y: number, color?: PlayerColor): GameArray {
+export function makeFieldMatrix(y: number, x: number, color?: PlayerColor): GameArray {
   const fieldMatrix: GameArray = [];
   for (let iX = 0; iX < x; iX++) {
     const firstLevelArray: Array<TypeCell | null> = [];
@@ -127,10 +127,10 @@ export function isOverEdge(rectCoord: iRectangleCells, { x, y }: iConfig) {
 
 export function setRectangleCells(mouseOverCellX: number, mouseOverCellY: number, dice: Dices): iRectangleCells {
   return {
-    xStart: Math.round(mouseOverCellX - dice[1] / 2),
-    xEnd: Math.round(mouseOverCellX + dice[1] / 2),
-    yStart: Math.round(mouseOverCellY - dice[0] / 2),
-    yEnd: Math.round(mouseOverCellY + dice[0] / 2),
+    xStart: Math.round(mouseOverCellX - dice[0] / 2),
+    xEnd: Math.round(mouseOverCellX + dice[0] / 2),
+    yStart: Math.round(mouseOverCellY - dice[1] / 2),
+    yEnd: Math.round(mouseOverCellY + dice[1] / 2),
   };
 }
 

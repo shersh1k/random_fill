@@ -15,6 +15,7 @@ import {
   SET_TEMP_FIELD_MATRIX,
   SET_PLAYER,
   GameArray,
+  SET_CELL_SIDES,
 } from './types';
 import { getRandomInt, makeFieldMatrix } from '../../Helpers';
 
@@ -103,6 +104,16 @@ export function setPlayer(player: iPlayer) {
       dice: null,
       currentFigure: null,
       currentPlayer: player,
+    });
+  };
+}
+
+export function setCellSides(width: number, height: number) {
+  return function (dispatch: Dispatch<GameActionTypes>) {
+    dispatch({
+      type: SET_CELL_SIDES,
+      cellWidth: width,
+      cellHeight: height,
     });
   };
 }

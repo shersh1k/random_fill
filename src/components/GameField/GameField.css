@@ -1,6 +1,10 @@
 .game-field {
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 50px);
+  height: 700px;
+  max-width: calc(100vw - 250px);
+  width: 700px;
 }
 
 .game-field__row {

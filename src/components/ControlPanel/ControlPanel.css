@@ -6,14 +6,15 @@
   align-items: center;
 }
 .new-figure-wrapper {
-  min-width: 150px;
-  min-height: 150px;
+  min-width: 250px;
+  min-height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .new-figure {
   cursor: pointer;
+  z-index: 100;
 }
 
 .new-figure__row {
