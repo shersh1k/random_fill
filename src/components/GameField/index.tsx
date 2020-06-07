@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import './GameField.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { iState } from '../../store';
 import { setTempFieldMatrix } from '../../store/game/actions';
@@ -12,6 +11,10 @@ import {
   isInsertByRules,
   fillFieldMatrix,
 } from '../../Helpers';
+
+import './GameField.css';
+import { Card } from 'antd';
+import Title from './Title';
 
 function GameField() {
   const fieldMatrixRef = useRef<HTMLDivElement>(null);
@@ -66,19 +69,21 @@ function GameField() {
     dispatch /*currentPlayer, dice, fieldMatrix, geometry, tempFieldMatrix */,
   ]);
   return (
-    <div ref={fieldMatrixRef} className='game-field'>
-      {tempFieldMatrix &&
-        tempFieldMatrix.map((item, index) => (
-          <div key={index} className='game-field__row'>
-            {item.map((item, index) => (
-              <span
-                key={index}
-                style={{ backgroundColor: item?.color || '', opacity: item?.opacity }}
-                className='game-field__cell'></span>
-            ))}
-          </div>
-        ))}
-    </div>
+    <Card title={<Title />}>
+      <div ref={fieldMatrixRef} className='game-field'>
+        {tempFieldMatrix &&
+          tempFieldMatrix.map((item, index) => (
+            <div key={index} className='game-field__row'>
+              {item.map((item, index) => (
+                <span
+                  key={index}
+                  style={{ backgroundColor: item?.color || '', opacity: item?.opacity }}
+                  className='game-field__cell'></span>
+              ))}
+            </div>
+          ))}
+      </div>
+    </Card>
   );
 }
 

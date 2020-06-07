@@ -1,4 +1,5 @@
 import React from 'react';
+import { Space } from 'antd';
 import ControlPanel from '../ControlPanel';
 import GameField from '../GameField';
 
@@ -6,10 +7,10 @@ import './Game.css';
 
 function Game() {
   return (
-    <div className='game'>
+    <Space>
       <ControlPanel />
       <GameField />
-    </div>
+    </Space>
   );
 }
 

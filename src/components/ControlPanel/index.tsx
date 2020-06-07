@@ -116,17 +116,19 @@ function ControlPanel() {
       title={<Title player={currentPlayer} />}
       actions={[
         <Button
+          block
           type='link'
           title='Undo'
-          icon={<UndoOutlined style={{ fontSize: '28px', color: '#ff4d4f' }} />}
+          icon={<UndoOutlined style={{ fontSize: '28px', color: !stepDone ? 'grey' : '#ff4d4f' }} />}
           disabled={!stepDone}
           onClick={undoHandler}
           key='undo'
         />,
         <Button
+          block
           type='link'
           title='Submit move'
-          icon={<CaretRightOutlined style={{ fontSize: '28px', color: 'green' }} />}
+          icon={<CaretRightOutlined style={{ fontSize: '28px', color: !stepDone ? 'grey' : 'green' }} />}
           disabled={!stepDone}
           onClick={submitHandler}
           key='submit'

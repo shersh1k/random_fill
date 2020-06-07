@@ -38,6 +38,7 @@ function Configurator() {
                     <Form.Item label={`Player ${index + 1}`} required={true} key={field.key}>
                       <Form.Item
                         {...field}
+                        initialValue={`Player ${index + 1}`}
                         rules={[{ required: true, message: `Please input player's name.` }]}
                         noStyle>
                         <Input placeholder='player name' style={{ width: '90%' }} />
