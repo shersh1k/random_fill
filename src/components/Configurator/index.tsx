@@ -21,14 +21,14 @@ function Configurator() {
             label='Cells horizontaly'
             name='x'
             rules={[{ required: true, message: 'Please, input Y cells' }]}>
-            <InputNumber min={20} max={45} />
+            <InputNumber min={20} max={100} />
           </Form.Item>
           <Form.Item
             {...layout}
             label='Cells verticaly'
             name='y'
             rules={[{ required: true, message: 'Please, input X cells' }]}>
-            <InputNumber min={20} max={45} />
+            <InputNumber min={20} max={100} />
           </Form.Item>
           <Form.List name='players'>
             {(fields, { add, remove }) => {
