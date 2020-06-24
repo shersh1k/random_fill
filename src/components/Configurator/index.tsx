@@ -21,14 +21,14 @@ function Configurator() {
             label='Cells horizontaly'
             name='x'
             rules={[{ required: true, message: 'Please, input Y cells' }]}>
-            <InputNumber min={20} max={100} />
+            <InputNumber min={20} max={50} />
           </Form.Item>
           <Form.Item
             {...layout}
             label='Cells verticaly'
             name='y'
             rules={[{ required: true, message: 'Please, input X cells' }]}>
-            <InputNumber min={20} max={100} />
+            <InputNumber min={20} max={50} />
           </Form.Item>
           <Form.List name='players'>
             {(fields, { add, remove }) => {
@@ -38,7 +38,6 @@ function Configurator() {
                     <Form.Item label={`Player ${index + 1}`} required={true} key={field.key}>
                       <Form.Item
                         {...field}
-                        initialValue={`Player ${index + 1}`}
                         rules={[{ required: true, message: `Please input player's name.` }]}
                         noStyle>
                         <Input placeholder='player name' style={{ width: '90%' }} />
@@ -54,7 +53,7 @@ function Configurator() {
                   ))}
                   {fields.length < 4 ? (
                     <Form.Item>
-                      <Button title='Add player' type='dashed' onClick={() => add()}>
+                      <Button title='Add player' type='dashed' onClick={() => add(`Player ${fields.length + 1}`)}>
                         <PlusOutlined /> Add player
                       </Button>
                     </Form.Item>

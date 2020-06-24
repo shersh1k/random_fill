@@ -184,11 +184,3 @@ function ControlPanel() {
 }
 
 export default ControlPanel;
-/* 
-<span
-  key={index}
-  style={{ backgroundColor: stepDone ? 'grey' : item?.color || '', zIndex: 100 }}
-  className='new-figure__cell'
->
-</span>
-*/

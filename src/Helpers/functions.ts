@@ -24,7 +24,7 @@ export function autofilling(fieldMatrix: GameArray, color: PlayerColor) {
       else return new TCell(false, itemX.opacity);
     });
   });
-  if (boolArr.filter((item) => item.filter((item) => item.content === false).length).length) {
+  if (boolArr.flat().filter((item) => item.content === false).length) {
     let a = fillTrue(boolArr);
     a.forEach((item, iY) =>
       item.forEach((item, iX) => {
