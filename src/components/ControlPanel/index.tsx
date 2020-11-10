@@ -8,7 +8,7 @@ import {
   CaretRightOutlined,
   FallOutlined,
 } from '@ant-design/icons';
-import { iState, store } from '../../store';
+import { iState } from '../../store';
 import {
   rollTheDice,
   rotateFigure,

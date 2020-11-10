@@ -42,7 +42,7 @@ function GameField() {
     resizeHandler();
     window.addEventListener('resize', resizeHandler);
     return () => window.removeEventListener('resize', resizeHandler);
-  }, [fieldMatrixRef]);
+  }, [fieldMatrixRef, config, dispatch]);
   useEffect(() => {
     if (!fieldMatrixRef.current || !geometry || !config || !tempFieldMatrix || !fieldMatrix || !dice || !currentPlayer)
       return;
