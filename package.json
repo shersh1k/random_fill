@@ -14,6 +14,7 @@
     "@types/redux-logger": "^3.0.8",
     "@types/socket.io-client": "^1.4.34",
     "antd": "^4.3.1",
+    "axios": "^0.21.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-jss": "^10.3.0",
