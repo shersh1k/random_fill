@@ -63,7 +63,7 @@ export default function Users() {
             description={
               <Card title={item.mail} style={{ color: item.mail === mail ? 'red' : void 0 }}>
                 {item.mail === mail && 'It`s you'}
-                {item.mail !== mail && <Button onClick={() => playHandler(item.mail)}>Play</Button>}
+                {item.mail !== mail && <Button /* loading */ onClick={() => playHandler(item.mail)}>Play</Button>}
               </Card>
             }
           />
