@@ -5,13 +5,13 @@ import Header from '../Header';
 import Login from '../Login';
 import Users from '../Users';
 // import Configurator from '../Configurator';
-// import Game from '../Game';
+import Game from '../Game';
 import Footer from '../Footer';
 
 import './App.css';
 
 function App() {
-  // const config = useSelector((state: iState) => state.game.config);
+  const config = useSelector((state: iState) => state.game.config);
   const isAuthorized = useSelector((state: iState) => state.user.isAuthorized);
 
   return (
@@ -19,8 +19,8 @@ function App() {
       <Header />
       {!isAuthorized && <Login />}
       {isAuthorized && <Users />}
-      {/* {isAuthorized && !config && <Configurator />}
-      {isAuthorized && config && <Game />} */}
+      {/* {isAuthorized && !config && <Configurator />} */}
+      {isAuthorized && config && <Game />}
       <Footer />
     </div>
   );
